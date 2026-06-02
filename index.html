@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCity Pulse - Infrastructure & Public Services Hub</title>
+    
+    <!-- Leaflet.js Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Core Application CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="brand-section">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-city"></i>
+                </div>
+                <div class="brand-name">
+                    <h2>SmartCity</h2>
+                    <p>Pulse Hub</p>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <span class="nav-label">Main Hub</span>
+                <div class="nav-link active" data-target="home" id="nav-home">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home Portal</span>
+                </div>
+                <div class="nav-link" data-target="about" id="nav-about">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>About System</span>
+                </div>
+
+                <span class="nav-label">Citizen Center</span>
+                <div class="nav-link" data-target="citizen-dashboard" id="nav-citizen-dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Citizen Dashboard</span>
+                </div>
+                <div class="nav-link" data-target="report-issue" id="nav-report-issue">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Report Issue</span>
+                </div>
+                <div class="nav-link" data-target="issue-tracking" id="nav-issue-tracking">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Issue Tracking</span>
+                </div>
+
+                <span class="nav-label">Operations</span>
+                <div class="nav-link" data-target="smart-analytics" id="nav-smart-analytics">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Smart Analytics</span>
+                </div>
+                <div class="nav-link" data-target="notifications" id="nav-notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Notifications</span>
+                </div>
+                <div class="nav-link" data-target="admin-dashboard" id="nav-admin-dashboard">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Admin Panel</span>
+                </div>
+
+                <span class="nav-label">Support</span>
+                <div class="nav-link" data-target="contact" id="nav-contact">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>Contact & FAQ</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-widget">
+                    <div class="avatar-wrapper">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop" alt="Citizen Avatar" class="user-avatar" id="sidebarAvatar">
+                        <div class="avatar-status"></div>
+                    </div>
+                    <div class="user-info">
+                        <h4 id="sidebarUsername">Sankalp Gaidhane</h4>
+                        <p id="sidebarRole">Verified Citizen</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN WINDOW -->
+        <main class="app-main">
+            
+            <!-- APPLICATION STICKY HEADER -->
+            <header class="app-header">
+                <div class="header-left">
+                    <div class="menu-toggle" id="sidebarToggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                    
+                    <div class="alert-quick-view">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <span>Grid warning: Scheduled maintenance in Sector 4 tonight.</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    
+                    <!-- Role Quick Switcher -->
+                    <div class="role-toggle-wrapper">
+                        <button class="role-btn active" id="roleBtnCitizen">
+                            <i class="fa-solid fa-user"></i> Citizen
+                        </button>
+                        <button class="role-btn" id="roleBtnAdmin">
+                            <i class="fa-solid fa-user-gear"></i> Admin
+                        </button>
+                    </div>
+
+                    <!-- System Date/Time Widget -->
+                    <div class="system-clock-wrapper">
+                        <i class="fa-regular fa-clock"></i>
+                        <span id="headerClock">00:00:00 PM</span>
+                    </div>
+
+                    <!-- Dark Mode Toggle Button -->
+                    <button class="action-btn" id="themeToggleBtn" title="Switch Theme">
+                        <i class="fa-solid fa-moon" id="themeToggleIcon"></i>
+                    </button>
+
+                    <!-- Header Notification Bell -->
+                    <button class="action-btn" id="headerNotifBtn" title="View Alerts">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge-dot" id="headerNotifBadge"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CENTRAL CONTENT WRAPPER -->
+            <div class="content-wrapper">
+                
+                <!-- 1. HOME PORTAL VIEW -->
+                <section class="page-view active" id="view-home">
+                    <div class="hero-section">
+                        <div class="hero-text">
+                            <h1>Building Smarter, Safer, & Connected Cities</h1>
+                            <p>Empowering citizens and municipal authorities to coordinate real-time solutions for public infrastructure, transit, and emergency responses.</p>
+                            
+                            <div class="hero-btns">
+                                <button class="btn btn-primary" onclick="window.location.hash='#citizen-dashboard'">
+                                    <i class="fa-solid fa-chart-line"></i> Open Dashboard
+                                </button>
+                                <button class="btn btn-secondary" onclick="window.location.hash='#report-issue'">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Report Incident
+                                </button>
+                            </div>
+
+                            <div class="hero-stats-row">
+                                <div class="hero-stat-item">
+                                    <h4 id="statTotalIssues">342</h4>
+                                    <p>Total Reported</p>
+                                </div>
+                                <div class="hero-stat-item">
+                                    <h4 id="statResolutionRate" style="color: var(--accent-blue);">94.2%</h4>
+                                    <p>Resolution Rate</p>
+                                </div>
+                                <div class="hero-stat-item">
+                                    <h4 id="statMinsResolution" style="color: var(--accent-purple);">12.5h</h4>
+                                    <p>Avg Resolve Time</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hero-illustration">
+                            <div class="mockup-pulse-sphere"></div>
+                            
+                            <div class="illustration-card ic-1">
+                                <div class="illustration-icon"><i class="fa-solid fa-bolt"></i></div>
+                                <div class="illustration-text">
+                                    <h5>Smart Grid</h5>
+                                    <p>99.8% Efficiency</p>
+                                </div>
+                            </div>
+
+                            <div class="illustration-card ic-2">
+                                <div class="illustration-icon" style="background: var(--gradient-orange);"><i class="fa-solid fa-road"></i></div>
+                                <div class="illustration-text">
+                                    <h5>Pothole Reported</h5>
+                                    <p>Sector 3 - Resolved</p>
+                                </div>
+                            </div>
+
+                            <div class="illustration-card ic-3">
+                                <i class="fa-solid fa-satellite-dish"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-headline">
+                        <p>Core Capabilities</p>
+                        <h2>System Features Overview</h2>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="glass-card feature-card">
+                            <div class="feature-icon-wrapper"><i class="fa-solid fa-bullhorn"></i></div>
+                            <h3>Digital Issue Reporting</h3>
+                            <p>Allows citizens to pinpoint infrastructure anomalies like road damages, broken lights, and water leaks in 3 simple steps.</p>
+                        </div>
+                        <div class="glass-card feature-card">
+                            <div class="feature-icon-wrapper" style="color: var(--accent-purple);"><i class="fa-solid fa-location-crosshairs"></i></div>
+                            <h3>Geo-Targeted Mapping</h3>
+                            <p>Dynamic Leaflet map coordinates plot incident locations instantly, linking citizen reports with field response teams.</p>
+                        </div>
+                        <div class="glass-card feature-card">
+                            <div class="feature-icon-wrapper" style="color: var(--accent-blue);"><i class="fa-solid fa-chart-column"></i></div>
+                            <h3>Predictive Analytics</h3>
+                            <p>Robust visual monitoring of operational key-performance indexes, resource allocations, and monthly incident trends.</p>
+                        </div>
+                    </div>
+
+                    <div class="home-cta-card">
+                        <div class="cta-content">
+                            <h3>Ready to make your neighborhood better?</h3>
+                            <p>Sign up, file reports, track municipal resolutions, and help build a stronger, more resilient municipal community today.</p>
+                        </div>
+                        <button class="btn btn-cyan" onclick="window.location.hash='#citizen-dashboard'">
+                            Get Started Now <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <footer class="home-footer">
+                        <div class="footer-logo">
+                            <i class="fa-solid fa-city"></i>
+                            <strong>SmartCity Pulse</strong>
+                        </div>
+                        <p>&copy; 2026 SmartCity Pulse. Built for Digital Governance Excellence.</p>
+                        <div class="footer-links">
+                            <a href="#about">Privacy Policy</a>
+                            <a href="#contact">Contact Support</a>
+                        </div>
+                    </footer>
+                </section>
+
+                <!-- 2. ABOUT SYSTEM VIEW -->
+                <section class="page-view" id="view-about">
+                    <div class="section-headline">
+                        <p>Our Mission</p>
+                        <h2>Smart City Governance & Management</h2>
+                    </div>
+
+                    <div class="about-grid">
+                        <div class="glass-card about-text">
+                            <h3>The Problem We Address</h3>
+                            <p>Modern municipalities often face massive operational silos. When a citizen detects a damaged asset, filing reports through telephone queues or obscure email channels leads to long delays, administrative backlogs, and poor resolution tracking.</p>
+                            <p>These delays don't just affect aesthetics; they lead to critical safety hazards, structural degradation, and elevated administrative repair costs.</p>
+                            <span class="about-text-gradient">Connecting People to Public Infrastructure</span>
+                        </div>
+
+                        <div class="glass-card about-text">
+                            <h3>Core Project Objectives</h3>
+                            <p>Our solution bridges the gap between public demand and municipal logistics, transforming how city resources are managed.</p>
+                            <ul class="about-list">
+                                <li><i class="fa-solid fa-check-double"></i> <span><strong>Empower Citizens</strong>: Open, highly usable and direct reporting platforms.</span></li>
+                                <li><i class="fa-solid fa-check-double"></i> <span><strong>Dynamic Scheduling</strong>: Immediate triage and work-order assignment algorithms.</span></li>
+                                <li><i class="fa-solid fa-check-double"></i> <span><strong>Granular Telemetry</strong>: Sensors tracking city health index scores.</span></li>
+                                <li><i class="fa-solid fa-check-double"></i> <span><strong>Accountability</strong>: Clear verification pipelines on the progress of reported tasks.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="vision-row">
+                        <div class="section-headline">
+                            <p>Looking Ahead</p>
+                            <h2>Future Vision Roadmap</h2>
+                        </div>
+
+                        <div class="vision-grid">
+                            <div class="vision-card">
+                                <div class="vision-icon"><i class="fa-solid fa-robot"></i></div>
+                                <h4>AI-Triage Automation</h4>
+                                <p>Automating camera image analysis on upload to instantly assess damage magnitude, classify categories, and deploy municipal units.</p>
+                            </div>
+                            <div class="vision-card">
+                                <div class="vision-icon" style="color: var(--accent-cyan);"><i class="fa-solid fa-network-wired"></i></div>
+                                <h4>IoT Grid Telemetry</h4>
+                                <p>Embedding physical acoustic sensors on street main lines to catch hidden water pipe ruptures before potholes develop.</p>
+                            </div>
+                            <div class="vision-card">
+                                <div class="vision-icon" style="color: var(--accent-orange);"><i class="fa-solid fa-leaf"></i></div>
+                                <h4>Eco-Balanced Transit</h4>
+                                <p>Optimizing electric city bus routing in real-time, mapping dynamic public demands directly against solar power grids.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. CITIZEN DASHBOARD VIEW -->
+                <section class="page-view" id="view-citizen-dashboard">
+                    <div class="dashboard-welcome">
+                        <h2>Welcome Back, Sankalp!</h2>
+                        <p>Keep track of neighborhood safety reports, infrastructure sensors, and ongoing service updates.</p>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="dashboard-grid-1">
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="dashTotalIssues">7</h3>
+                                <p>Active Incident Reports</p>
+                            </div>
+                            <div class="metric-icon"><i class="fa-solid fa-folder-open"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="dashResolvedIssues" style="color: var(--accent-green);">2</h3>
+                                <p>Successfully Resolved</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-green);"><i class="fa-solid fa-circle-check"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="dashAlertsActive" style="color: var(--accent-yellow);">3</h3>
+                                <p>Critical Alerts Broadcast</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-yellow);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="dashTransitStatus" style="color: var(--accent-blue);">98%</h3>
+                                <p>Transit Grid Integrity</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-blue);"><i class="fa-solid fa-bus"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Main Dashboard Layout -->
+                    <div class="dashboard-layout-grid">
+                        
+                        <!-- Leaflet Interactive Smart Map -->
+                        <div class="glass-card map-card">
+                            <div class="map-card-header">
+                                <div class="card-title">
+                                    <i class="fa-solid fa-map-location-dot"></i> Live Smart Infrastructure Map
+                                </div>
+                            </div>
+                            <div class="map-container-wrapper">
+                                <div id="dashboardMap" class="smart-map"></div>
+                                <div class="map-overlay-kpi">
+                                    <i class="fa-solid fa-circle-dot"></i>
+                                    <span>Incident plotting: Active reports listed on map. Click marker for updates.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Sidebar Column -->
+                        <div class="dash-actions-panel">
+                            
+                            <!-- Quick Action Buttons -->
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <div class="card-title"><i class="fa-solid fa-bolt"></i> Quick Actions</div>
+                                </div>
+                                <div class="quick-action-strip">
+                                    <div class="action-strip-btn" onclick="window.location.hash='#report-issue'">
+                                        <div class="action-strip-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                                        <div class="action-strip-text">
+                                            <h5>Report New Issue</h5>
+                                            <p>Submit pothole, utility, or hazard photos</p>
+                                        </div>
+                                    </div>
+                                    <div class="action-strip-btn" onclick="window.location.hash='#issue-tracking'">
+                                        <div class="action-strip-icon"><i class="fa-solid fa-magnifying-glass-location"></i></div>
+                                        <div class="action-strip-text">
+                                            <h5>Track Pending Incidents</h5>
+                                            <p>Observe live work-order repair tracking</p>
+                                        </div>
+                                    </div>
+                                    <div class="action-strip-btn" onclick="window.location.hash='#contact'">
+                                        <div class="action-strip-icon"><i class="fa-solid fa-comment-dots"></i></div>
+                                        <div class="action-strip-text">
+                                            <h5>Community Helpline</h5>
+                                            <p>View FAQs or connect with live triage support</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Telemetry Health Widgets -->
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <div class="card-title"><i class="fa-solid fa-gauge-high"></i> Infrastructure Telemetry</div>
+                                </div>
+                                <div class="infra-health-widget">
+                                    <div class="infra-health-item">
+                                        <div class="infra-health-meta">
+                                            <span class="infra-health-name"><i class="fa-solid fa-wind"></i> Air Quality Index</span>
+                                            <span class="infra-health-value" id="telemetryAqi">42 AQI (Optimal)</span>
+                                        </div>
+                                        <div class="infra-progress-bar">
+                                            <div class="infra-progress-fill" style="width: 88%;" id="fillAqi"></div>
+                                        </div>
+                                    </div>
+                                    <div class="infra-health-item">
+                                        <div class="infra-health-meta">
+                                            <span class="infra-health-name"><i class="fa-solid fa-droplet"></i> Grid Water Pressure</span>
+                                            <span class="infra-health-value" id="telemetryWater">3.2 bar (Stable)</span>
+                                        </div>
+                                        <div class="infra-progress-bar">
+                                            <div class="infra-progress-fill" style="width: 76%;" id="fillWater"></div>
+                                        </div>
+                                    </div>
+                                    <div class="infra-health-item">
+                                        <div class="infra-health-meta">
+                                            <span class="infra-health-name"><i class="fa-solid fa-plug-circle-bolt"></i> Grid Power Load</span>
+                                            <span class="infra-health-value" id="telemetryPower">64% (Nominal)</span>
+                                        </div>
+                                        <div class="infra-progress-bar">
+                                            <div class="infra-progress-fill" style="width: 64%;" id="fillPower"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities List -->
+                    <div class="glass-card">
+                        <div class="glass-card-header">
+                            <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Live Activity Feed</div>
+                        </div>
+                        <div class="activity-ticker" id="citizenActivityTicker">
+                            <!-- Populated Dynamically via JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. REPORT ISSUE PAGE VIEW -->
+                <section class="page-view" id="view-report-issue">
+                    <div class="section-headline">
+                        <p>Citizen Reporting Form</p>
+                        <h2>Submit Infrastructure Issue</h2>
+                    </div>
+
+                    <div class="report-issue-grid">
+                        
+                        <!-- Left column: The Report Form -->
+                        <div class="glass-card">
+                            <div class="coordinate-banner">
+                                <span><i class="fa-solid fa-location-dot"></i> Targeted GPS Location:</span>
+                                <span class="coordinate-val" id="reportCoordinates">45.4215, -75.6972</span>
+                            </div>
+
+                            <form id="issueReportForm" onsubmit="event.preventDefault();">
+                                
+                                <div class="form-group">
+                                    <label class="form-label">1. Choose Issue Category</label>
+                                    <div class="category-picker" id="reportCategoryPicker">
+                                        <div class="category-option selected" data-value="roads">
+                                            <i class="fa-solid fa-road"></i>
+                                            <span>Road & Potholes</span>
+                                        </div>
+                                        <div class="category-option" data-value="utilities">
+                                            <i class="fa-solid fa-lightbulb"></i>
+                                            <span>Streetlights & Utilities</span>
+                                        </div>
+                                        <div class="category-option" data-value="water">
+                                            <i class="fa-solid fa-droplet"></i>
+                                            <span>Water & Leaks</span>
+                                        </div>
+                                        <div class="category-option" data-value="sanitation">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            <span>Sanitation & Waste</span>
+                                        </div>
+                                        <div class="category-option" data-value="signals">
+                                            <i class="fa-solid fa-traffic-light"></i>
+                                            <span>Traffic Signals</span>
+                                        </div>
+                                        <div class="category-option" data-value="transit">
+                                            <i class="fa-solid fa-bus"></i>
+                                            <span>Transit Services</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="reportTitle" class="form-label">2. Report Headline</label>
+                                    <input type="text" id="reportTitle" class="form-control" placeholder="e.g. Broken Streetlight near Central Park Corner" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="reportLocationText" class="form-label">3. Physical Location / Address Address</label>
+                                    <input type="text" id="reportLocationText" class="form-control" placeholder="e.g. Main Street, adjacent to Coffee Corner" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="reportPriority" class="form-label">4. Priority Assessment</label>
+                                    <select id="reportPriority" class="form-control">
+                                        <option value="low">Low - General Improvement</option>
+                                        <option value="medium" selected>Medium - Hazard Alert</option>
+                                        <option value="high">High - High Emergency / Interrupted Service</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">5. Add Asset / Hazard Image</label>
+                                    <div class="image-upload-mock" id="uploadMockContainer">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        <span>Click to simulate photo upload</span>
+                                        <input type="file" id="imageInput" class="file-upload-input" accept="image/*">
+                                        <img src="" alt="Upload Preview" class="upload-preview" id="uploadPreviewImg">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="reportDescription" class="form-label">6. Incident Explanation / Notes</label>
+                                    <textarea id="reportDescription" class="form-control" placeholder="Provide extra description about how severe the problem is..." required></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 14px;" id="btnSubmitReport">
+                                    <i class="fa-solid fa-paper-plane"></i> File Incident Report
+                                </button>
+
+                            </form>
+                        </div>
+
+                        <!-- Right Column: Coordinates Map Picker -->
+                        <div>
+                            <div class="glass-card" style="margin-bottom: 20px;">
+                                <div class="glass-card-header">
+                                    <div class="card-title"><i class="fa-solid fa-map-pin"></i> Pinpoint Location</div>
+                                </div>
+                                <div class="map-picker-container">
+                                    <div id="pickerMap" class="smart-map"></div>
+                                </div>
+                                <div class="map-picker-help">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    <span>Click on the map grid to set the exact coordinates for the field team.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 5. ISSUE TRACKING VIEW -->
+                <section class="page-view" id="view-issue-tracking">
+                    <div class="section-headline">
+                        <p>Public Resolutions</p>
+                        <h2>Explore Incident Tracker</h2>
+                    </div>
+
+                    <div class="tracking-header">
+                        <div class="search-filter-row">
+                            <div class="search-input-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="trackSearch" class="form-control search-input" placeholder="Search by description, address, or ID...">
+                            </div>
+                            <select id="trackCategoryFilter" class="form-control filter-select">
+                                <option value="all">All Categories</option>
+                                <option value="roads">Road & Potholes</option>
+                                <option value="utilities">Streetlights & Utilities</option>
+                                <option value="water">Water & Leaks</option>
+                                <option value="sanitation">Sanitation & Waste</option>
+                                <option value="signals">Traffic Signals</option>
+                                <option value="transit">Transit Services</option>
+                            </select>
+                        </div>
+
+                        <div class="tab-filter-container">
+                            <span class="tab-filter-btn active" data-status="all">All Items</span>
+                            <span class="tab-filter-btn" data-status="pending">Pending</span>
+                            <span class="tab-filter-btn" data-status="review">Under Review</span>
+                            <span class="tab-filter-btn" data-status="progress">In Progress</span>
+                            <span class="tab-filter-btn" data-status="resolved">Resolved</span>
+                        </div>
+                    </div>
+
+                    <div class="issues-list-container" id="trackerList">
+                        <!-- Placed Dynamically via JavaScript -->
+                    </div>
+                </section>
+
+                <!-- 6. SMART ANALYTICS VIEW -->
+                <section class="page-view" id="view-smart-analytics">
+                    <div class="section-headline">
+                        <p>Operational Metrics</p>
+                        <h2>City Infrastructure Analytics</h2>
+                    </div>
+
+                    <!-- Grid of Top metrics -->
+                    <div class="analytics-grid-1">
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="analTotalIssues">7</h3>
+                                <p>Total Incidents Logged</p>
+                            </div>
+                            <div class="metric-icon"><i class="fa-solid fa-list-ol"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="analPendingCount" style="color: var(--accent-orange);">2</h3>
+                                <p>Incidents Unresolved</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-orange);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="analAvgResolution" style="color: var(--accent-blue);">94.3%</h3>
+                                <p>Overall Safety Grade</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-blue);"><i class="fa-solid fa-award"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="analResponseTime" style="color: var(--accent-purple);">12.5 hrs</h3>
+                                <p>Mean Action Time</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-purple);"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Visuals Row -->
+                    <div class="analytics-charts-grid">
+                        
+                        <!-- Left Widget: Distribution -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Issue Distribution by Category</div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="chartCategoryDist"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Right Widget: Weekly Reporting Volumes -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-chart-line"></i> Incident Reports Trend (Weekly)</div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="chartActivityTrend"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Row: Bar chart on Team Performance & Dense Widget grid -->
+                    <div class="dashboard-layout-grid">
+                        
+                        <!-- Resolution bars -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-check-double"></i> Resolution Performance by Sector</div>
+                            </div>
+                            <div class="chart-wrapper" style="height: 350px;">
+                                <canvas id="chartSectorPerf"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Dense Grid indicators -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-network-wired"></i> Core Infrastructure Indicators</div>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 20px;">City Performance Scorecard measures service-level target compliance across departments.</p>
+                            
+                            <div class="kpi-grid-dense">
+                                <div class="kpi-dense-card">
+                                    <h4 id="perfPower">99.8%</h4>
+                                    <p>Power Grid</p>
+                                </div>
+                                <div class="kpi-dense-card">
+                                    <h4 id="perfWater" style="color: var(--accent-blue);">98.4%</h4>
+                                    <p>Water System</p>
+                                </div>
+                                <div class="kpi-dense-card">
+                                    <h4 id="perfTransit" style="color: var(--accent-purple);">94.7%</h4>
+                                    <p>Bus On-Time</p>
+                                </div>
+                                <div class="kpi-dense-card">
+                                    <h4 id="perfLights" style="color: var(--accent-yellow);">96.8%</h4>
+                                    <p>Utilities</p>
+                                </div>
+                                <div class="kpi-dense-card">
+                                    <h4 id="perfGarbage" style="color: var(--accent-orange);">92.3%</h4>
+                                    <p>Trash Pickup</p>
+                                </div>
+                                <div class="kpi-dense-card">
+                                    <h4 id="perfSignals" style="color: var(--accent-red);">99.2%</h4>
+                                    <p>Signals</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 7. NOTIFICATIONS BROADCAST VIEW -->
+                <section class="page-view" id="view-notifications">
+                    <div class="section-headline">
+                        <p>Municipal Bulletins</p>
+                        <h2>Operational Notifications Feed</h2>
+                    </div>
+
+                    <div class="notifs-layout">
+                        
+                        <!-- Left Panel: Settings Controls -->
+                        <div class="glass-card notif-settings-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-sliders"></i> Alert Settings</div>
+                            </div>
+                            
+                            <div class="notif-toggle-row">
+                                <div class="notif-toggle-meta">
+                                    <h5>High Severity Alerts</h5>
+                                    <p>Immediate push for life-threatening power grid drops.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="chkNotifHigh" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notif-toggle-row">
+                                <div class="notif-toggle-meta">
+                                    <h5>Status Updates</h5>
+                                    <p>Receive notifications when your reported issue resolves.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="chkNotifStatus" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notif-toggle-row">
+                                <div class="notif-toggle-meta">
+                                    <h5>General Announcements</h5>
+                                    <p>City council bulletins and park schedules.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="chkNotifGeneral">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notif-toggle-row">
+                                <div class="notif-toggle-meta">
+                                    <h5>Auditory Sound Alerts</h5>
+                                    <p>Play tone when emergency warning logs submit.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="chkNotifSound" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: The Feed -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-stream"></i> Broadcast Feed</div>
+                                <button class="btn btn-secondary btn-small" id="btnClearNotifs">
+                                    <i class="fa-solid fa-trash"></i> Clear All
+                                </button>
+                            </div>
+                            <div class="notif-feed" id="notificationsFeedList">
+                                <!-- Populated Dynamically via JavaScript -->
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 8. ADMIN OPERATIONS VIEW -->
+                <section class="page-view" id="view-admin-dashboard">
+                    <div class="section-headline">
+                        <p>Admin Control Dashboard</p>
+                        <h2>City Operations Triage Desk</h2>
+                    </div>
+
+                    <!-- Metrics -->
+                    <div class="admin-metrics-grid">
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="adminStatTotal">7</h3>
+                                <p>Assigned Cases</p>
+                            </div>
+                            <div class="metric-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="adminStatPending" style="color: var(--accent-orange);">2</h3>
+                                <p>Awaiting Triage</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-orange);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="adminStatProgress" style="color: var(--accent-blue);">3</h3>
+                                <p>Active Operations</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-blue);"><i class="fa-solid fa-hammer"></i></div>
+                        </div>
+                        <div class="glass-card metric-card">
+                            <div class="metric-info">
+                                <h3 id="adminStatResolved" style="color: var(--accent-green);">2</h3>
+                                <p>Resolved Tasks</p>
+                            </div>
+                            <div class="metric-icon" style="color: var(--accent-green);"><i class="fa-solid fa-check-to-slot"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Layout Grid: Table + Side telemetry controls -->
+                    <div class="admin-layout-grid">
+                        
+                        <!-- Left Panel: Large Issues Triage table -->
+                        <div class="glass-card">
+                            <div class="glass-card-header admin-live-ticker-header">
+                                <div class="card-title"><i class="fa-solid fa-toolbox"></i> Rapid Response Center</div>
+                                <div class="live-indicator">
+                                    <div class="live-indicator-dot"></div>
+                                    <span>Live Feed</span>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 20px;">Review, assign priorities, or transition incident status in real-time. Actions synchronize across the user interface.</p>
+                            
+                            <div class="admin-table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Issue Info</th>
+                                            <th>Reporter</th>
+                                            <th>Priority</th>
+                                            <th>Logged Date</th>
+                                            <th>Triage Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminTriageTableBody">
+                                        <!-- Populated Dynamically via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Telemetry sensor feeds -->
+                        <div class="dash-actions-panel">
+                            
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <div class="card-title"><i class="fa-solid fa-gauge"></i> Live Telemetry Grid</div>
+                                </div>
+                                <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">Simulated real-time city infrastructure nodes updating continuously.</p>
+                                
+                                <div class="telemetry-sensors-grid">
+                                    <div class="sensor-widget-card">
+                                        <div class="sensor-glow"></div>
+                                        <div class="sensor-header">
+                                            <span>AQI Node 04</span>
+                                            <i class="fa-solid fa-wind" style="color: var(--accent-cyan);"></i>
+                                        </div>
+                                        <div class="sensor-value" id="sensorAqiVal">42</div>
+                                        <div class="sensor-sparkline" id="sparklineAqi">Stable</div>
+                                    </div>
+                                    <div class="sensor-widget-card">
+                                        <div class="sensor-glow"></div>
+                                        <div class="sensor-header">
+                                            <span>Water Main 23</span>
+                                            <i class="fa-solid fa-droplet" style="color: var(--accent-blue);"></i>
+                                        </div>
+                                        <div class="sensor-value" id="sensorWaterVal">3.2 bar</div>
+                                        <div class="sensor-sparkline" id="sparklineWater">Nominal</div>
+                                    </div>
+                                    <div class="sensor-widget-card">
+                                        <div class="sensor-glow"></div>
+                                        <div class="sensor-header">
+                                            <span>Grid Transformer</span>
+                                            <i class="fa-solid fa-bolt-lightning" style="color: var(--accent-yellow);"></i>
+                                        </div>
+                                        <div class="sensor-value" id="sensorPowerVal">64%</div>
+                                        <div class="sensor-sparkline" id="sparklinePower">Normal</div>
+                                    </div>
+                                    <div class="sensor-widget-card">
+                                        <div class="sensor-glow"></div>
+                                        <div class="sensor-header">
+                                            <span>Bus Transit Route</span>
+                                            <i class="fa-solid fa-bus" style="color: var(--accent-purple);"></i>
+                                        </div>
+                                        <div class="sensor-value" id="sensorTransitVal">98%</div>
+                                        <div class="sensor-sparkline" id="sparklineTransit">On-Time</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card">
+                                <div class="glass-card-header">
+                                    <div class="card-title"><i class="fa-solid fa-users-gear"></i> Field Crews Deployment</div>
+                                </div>
+                                <ul class="infra-health-widget">
+                                    <li class="infra-health-item">
+                                        <div class="infra-health-meta">
+                                            <span class="infra-health-name"><i class="fa-solid fa-helmet-safety"></i> Sector 1 Road Crew</span>
+                                            <span class="infra-health-value">Active (4/5 Deploy)</span>
+                                        </div>
+                                    </li>
+                                    <li class="infra-health-item">
+                                        <div class="infra-health-meta">
+                                            <span class="infra-health-name"><i class="fa-solid fa-faucet-drip"></i> Water Utility Team</span>
+                                            <span class="infra-health-value" style="color: var(--accent-orange);">Dispatched (Emergency)</span>
+                                        </div>
+                                    </li>
+                                    <li class="infra-health-item">
+                                        <div class="infra-health-meta">
+                                            <span class="infra-health-name"><i class="fa-solid fa-bolt"></i> Grid Engineers</span>
+                                            <span class="infra-health-value" style="color: var(--text-muted);">Standby</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. CONTACT & FAQ VIEW -->
+                <section class="page-view" id="view-contact">
+                    <div class="section-headline">
+                        <p>Support Channels</p>
+                        <h2>Contact & FAQs</h2>
+                    </div>
+
+                    <div class="contact-layout">
+                        
+                        <!-- Left Panel: FAQ Accordion -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</div>
+                            </div>
+                            
+                            <div class="faq-container">
+                                <div class="faq-item">
+                                    <div class="faq-header">
+                                        <span>How long does it take for a reported issue to be assigned?</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-body">
+                                        High priority alerts are triaged within 30 minutes, and general issues (like potholes or streetlights) are processed and allocated to specialized sector maintenance teams within 4 to 8 business hours.
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <div class="faq-header">
+                                        <span>Can I report anomalies without choosing precise coordinates?</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-body">
+                                        While pinpointing GPS details on the map ensures rapid dispatcher deployment, you can type addresses or cross-streets into the physical location field, and our triage teams will map it manually.
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <div class="faq-header">
+                                        <span>How do I notify the city about emergency transit bottlenecks?</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-body">
+                                        Submit a transit service alert, flagging high-priority levels. If the blockage represents an immediate danger to lives or assets, please bypass reporting apps and phone civil emergency lines immediately.
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <div class="faq-header">
+                                        <span>Is my privacy guarded when filing community complaints?</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-body">
+                                        Yes, citizen emails and names are stored in secure, encrypted profiles and only shared with the direct dispatch agency. Public issue trackers only list details of the reports, never personal information.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Contact Inquiry Form -->
+                        <div class="glass-card">
+                            <div class="glass-card-header">
+                                <div class="card-title"><i class="fa-solid fa-envelope"></i> Send General Inquiry</div>
+                            </div>
+                            
+                            <form id="contactQueryForm" onsubmit="event.preventDefault();">
+                                <div class="form-group">
+                                    <label for="contactName" class="form-label">Full Name</label>
+                                    <input type="text" id="contactName" class="form-control" placeholder="e.g. Sankalp Gaidhane" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail" class="form-label">Email Address</label>
+                                    <input type="email" id="contactEmail" class="form-control" placeholder="e.g. sankalp.g@gmail.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactSubject" class="form-label">Inquiry Area</label>
+                                    <select id="contactSubject" class="form-control">
+                                        <option value="general">General Support</option>
+                                        <option value="tech">Application Glitch</option>
+                                        <option value="partnership">Municipal Partnerships</option>
+                                        <option value="press">Press & Media Relations</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactMessage" class="form-label">Your Message</label>
+                                    <textarea id="contactMessage" class="form-control" placeholder="Detail your feedback or questions..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-cyan" style="width: 100%; justify-content: center; padding: 12px;" id="btnSubmitContact">
+                                    <i class="fa-solid fa-paper-plane"></i> Send Query
+                                </button>
+                            </form>
+
+                            <div class="support-cards-row">
+                                <div class="support-icon-card">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <h5>Emergency Hotlines</h5>
+                                    <p>+1 (800) 555-0199</p>
+                                </div>
+                                <div class="support-icon-card">
+                                    <i class="fa-solid fa-map-location"></i>
+                                    <h5>HQ Registry</h5>
+                                    <p>City Hall, Sector 1</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+
+        </main>
+        
+    </div>
+
+    <!-- TOAST NOTIFICATIONS POPUP FRAME -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Chart.js Visualization Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet.js Map Library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Main Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
