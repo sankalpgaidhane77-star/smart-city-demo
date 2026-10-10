@@ -100,9 +100,9 @@
                         <i class="fa-solid fa-bars"></i>
                     </div>
                     
-                    <div class="alert-quick-view">
+                    <div class="alert-quick-view" id="headerAlertBanner" style="cursor: pointer;" title="Click to view municipal bulletins" onclick="window.location.hash='#notifications'">
                         <i class="fa-solid fa-bullhorn"></i>
-                        <span>Grid warning: Scheduled maintenance in Sector 4 tonight.</span>
+                        <span id="headerAlertBannerText">Grid warning: Scheduled maintenance in Sector 4 tonight.</span>
                     </div>
                 </div>
 
@@ -340,13 +340,23 @@
                         
                         <!-- Leaflet Interactive Smart Map -->
                         <div class="glass-card map-card">
-                            <div class="map-card-header">
+                            <div class="map-card-header" style="flex-wrap: wrap; gap: 10px;">
                                 <div class="card-title">
                                     <i class="fa-solid fa-map-location-dot"></i> Live Smart Infrastructure Map
+                                </div>
+                                <div class="map-filter-strip" id="mapCategoryFilters">
+                                    <button class="map-filter-btn active" data-cat="all"><i class="fa-solid fa-layer-group"></i> All</button>
+                                    <button class="map-filter-btn" data-cat="roads"><i class="fa-solid fa-road"></i> Roads</button>
+                                    <button class="map-filter-btn" data-cat="utilities"><i class="fa-solid fa-lightbulb"></i> Utilities</button>
+                                    <button class="map-filter-btn" data-cat="water"><i class="fa-solid fa-droplet"></i> Water</button>
+                                    <button class="map-filter-btn" data-cat="sanitation"><i class="fa-solid fa-trash-can"></i> Sanitation</button>
+                                    <button class="map-filter-btn" data-cat="signals"><i class="fa-solid fa-traffic-light"></i> Signals</button>
+                                    <button class="map-filter-btn" data-cat="transit"><i class="fa-solid fa-bus"></i> Transit</button>
                                 </div>
                             </div>
                             <div class="map-container-wrapper">
                                 <div id="dashboardMap" class="smart-map"></div>
+                                <button class="map-locate-btn" id="btnLocateDashboardMap"><i class="fa-solid fa-crosshairs"></i> Locate Me</button>
                                 <div class="map-overlay-kpi">
                                     <i class="fa-solid fa-circle-dot"></i>
                                     <span>Incident plotting: Active reports listed on map. Click marker for updates.</span>
@@ -448,9 +458,14 @@
                         
                         <!-- Left column: The Report Form -->
                         <div class="glass-card">
-                            <div class="coordinate-banner">
-                                <span><i class="fa-solid fa-location-dot"></i> Targeted GPS Location:</span>
-                                <span class="coordinate-val" id="reportCoordinates">45.4215, -75.6972</span>
+                            <div class="coordinate-banner" style="justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <span><i class="fa-solid fa-location-dot"></i> Targeted GPS Location:</span>
+                                    <span class="coordinate-val" id="reportCoordinates">21.14580, 79.08820</span>
+                                </div>
+                                <button type="button" class="btn-quick-fill" id="btnAutofillReport">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> ⚡ Fill Sample Data
+                                </button>
                             </div>
 
                             <form id="issueReportForm" onsubmit="event.preventDefault();">
@@ -487,12 +502,12 @@
 
                                 <div class="form-group">
                                     <label for="reportTitle" class="form-label">2. Report Headline</label>
-                                    <input type="text" id="reportTitle" class="form-control" placeholder="e.g. Broken Streetlight near Central Park Corner" required>
+                                    <input type="text" id="reportTitle" class="form-control" placeholder="e.g. Broken Streetlight near Kasturchand Park" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="reportLocationText" class="form-label">3. Physical Location / Address Address</label>
-                                    <input type="text" id="reportLocationText" class="form-control" placeholder="e.g. Main Street, adjacent to Coffee Corner" required>
+                                    <label for="reportLocationText" class="form-label">3. Physical Location / Street Address</label>
+                                    <input type="text" id="reportLocationText" class="form-control" placeholder="e.g. Civil Lines, near High Court Square, Nagpur" required>
                                 </div>
 
                                 <div class="form-group">
@@ -508,7 +523,7 @@
                                     <label class="form-label">5. Add Asset / Hazard Image</label>
                                     <div class="image-upload-mock" id="uploadMockContainer">
                                         <i class="fa-solid fa-cloud-arrow-up"></i>
-                                        <span>Click to simulate photo upload</span>
+                                        <span>Click or drag photo here to upload</span>
                                         <input type="file" id="imageInput" class="file-upload-input" accept="image/*">
                                         <img src="" alt="Upload Preview" class="upload-preview" id="uploadPreviewImg">
                                     </div>
@@ -532,13 +547,16 @@
                                 <div class="glass-card-header">
                                     <div class="card-title"><i class="fa-solid fa-map-pin"></i> Pinpoint Location</div>
                                 </div>
-                                <div class="map-picker-container">
+                                <div class="map-picker-container" style="position: relative;">
                                     <div id="pickerMap" class="smart-map"></div>
                                 </div>
                                 <div class="map-picker-help">
                                     <i class="fa-solid fa-circle-info"></i>
-                                    <span>Click on the map grid to set the exact coordinates for the field team.</span>
+                                    <span>Click anywhere on the map grid to lock exact coordinates for field responders.</span>
                                 </div>
+                                <button type="button" class="btn btn-secondary btn-small" id="btnLocatePickerMap" style="margin-top: 10px; width: 100%; justify-content: center;">
+                                    <i class="fa-solid fa-location-crosshairs"></i> Use My GPS Location
+                                </button>
                             </div>
                         </div>
 
@@ -585,9 +603,14 @@
 
                 <!-- 6. SMART ANALYTICS VIEW -->
                 <section class="page-view" id="view-smart-analytics">
-                    <div class="section-headline">
-                        <p>Operational Metrics</p>
-                        <h2>City Infrastructure Analytics</h2>
+                    <div class="section-headline" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <p>Operational Metrics</p>
+                            <h2>City Infrastructure Analytics</h2>
+                        </div>
+                        <button class="btn btn-secondary btn-small" id="btnExportAnalytics" style="align-self: center;">
+                            <i class="fa-solid fa-file-csv"></i> Export Analytics Summary (CSV)
+                        </button>
                     </div>
 
                     <!-- Grid of Top metrics -->
@@ -825,8 +848,39 @@
                                     <span>Live Feed</span>
                                 </div>
                             </div>
-                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 20px;">Review, assign priorities, or transition incident status in real-time. Actions synchronize across the user interface.</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">Review, assign priorities, transition incident statuses, or broadcast emergencies in real-time.</p>
                             
+                            <!-- Admin Interactive Toolbar -->
+                            <div class="admin-toolbar-row">
+                                <div class="admin-filter-group">
+                                    <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="Search title, ID, reporter, location...">
+                                    <select id="adminStatusFilter" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.8rem;">
+                                        <option value="all">All Statuses</option>
+                                        <option value="pending">Awaiting Triage</option>
+                                        <option value="review">Under Review</option>
+                                        <option value="progress">In Progress</option>
+                                        <option value="resolved">Resolved</option>
+                                    </select>
+                                    <select id="adminPriorityFilter" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.8rem;">
+                                        <option value="all">All Priorities</option>
+                                        <option value="high">High Priority</option>
+                                        <option value="medium">Medium Priority</option>
+                                        <option value="low">Low Priority</option>
+                                    </select>
+                                </div>
+                                <div class="admin-action-group">
+                                    <button class="btn btn-primary btn-small" id="btnOpenBroadcastModal">
+                                        <i class="fa-solid fa-bullhorn"></i> Broadcast Alert
+                                    </button>
+                                    <button class="btn btn-secondary btn-small" id="btnExportAdminCsv">
+                                        <i class="fa-solid fa-download"></i> Export CSV
+                                    </button>
+                                    <button class="btn btn-secondary btn-small" id="btnResetDemoData" title="Reset all issues to default mock data">
+                                        <i class="fa-solid fa-rotate-left"></i> Reset Demo
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="admin-table-container">
                                 <table class="admin-table">
                                     <thead>
@@ -836,6 +890,7 @@
                                             <th>Priority</th>
                                             <th>Logged Date</th>
                                             <th>Triage Status</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="adminTriageTableBody">
@@ -1036,6 +1091,85 @@
 
         </main>
         
+    </div>
+
+    <!-- INCIDENT DETAIL & AUDIT TIMELINE MODAL -->
+    <div class="modal-backdrop" id="incidentDetailModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-circle-info" style="color: var(--accent-cyan);"></i> <span id="modalIssueTitle">Incident Details</span></h3>
+                <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="Incident Photo" class="modal-detail-img" id="modalIssueImg">
+                <div class="modal-meta-grid">
+                    <div class="modal-meta-item">
+                        <span>Incident ID</span>
+                        <strong id="modalIssueId">REP-1024</strong>
+                    </div>
+                    <div class="modal-meta-item">
+                        <span>Current Status</span>
+                        <strong id="modalIssueStatus">Under Review</strong>
+                    </div>
+                    <div class="modal-meta-item">
+                        <span>Category & Priority</span>
+                        <strong id="modalIssueCatPrio">Roads | High</strong>
+                    </div>
+                    <div class="modal-meta-item">
+                        <span>Reported By & Date</span>
+                        <strong id="modalIssueReporter">Sankalp Gaidhane</strong>
+                    </div>
+                </div>
+                <p id="modalIssueLocation" style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px;"><i class="fa-solid fa-location-dot" style="color: var(--accent-cyan);"></i> <span></span></p>
+                <p id="modalIssueDesc" style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; color: var(--text-primary);"></p>
+                
+                <div class="modal-timeline-title"><i class="fa-solid fa-timeline"></i> Action & Dispatch Timeline</div>
+                <div class="modal-timeline-list" id="modalTimelineList"></div>
+                
+                <div class="modal-timeline-title"><i class="fa-solid fa-comment-medical"></i> Post Update / Field Note</div>
+                <div class="modal-add-note-box">
+                    <textarea id="modalNewNoteInput" class="form-control" placeholder="Add an operational update note to this incident..."></textarea>
+                    <button class="btn btn-primary" id="btnSubmitModalNote"><i class="fa-solid fa-plus"></i> Add Note</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnModalLocateMap"><i class="fa-solid fa-map-location-dot"></i> View on Map</button>
+                <button class="btn btn-secondary" id="modalFooterCloseBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BROADCAST MUNICIPAL BULLETIN MODAL -->
+    <div class="modal-backdrop" id="broadcastAlertModal">
+        <div class="modal-container" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-bullhorn" style="color: var(--accent-yellow);"></i> Broadcast Municipal Bulletin</h3>
+                <button class="modal-close-btn" id="broadcastModalCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="broadcastAlertForm" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label class="form-label">Alert Severity Type</label>
+                        <select id="broadcastType" class="form-control">
+                            <option value="alert">Critical Emergency Alert (High Severity)</option>
+                            <option value="update">Operational System Update</option>
+                            <option value="announcement">Public Municipal Announcement</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bulletin Title</label>
+                        <input type="text" id="broadcastTitle" class="form-control" placeholder="e.g. Severe Weather Advisory: Heavy Monsoon Inbound" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Broadcast Message Details</label>
+                        <textarea id="broadcastMessage" class="form-control" rows="4" placeholder="Detail the bulletin information for all citizens across the municipality..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;" id="btnSubmitBroadcast">
+                        <i class="fa-solid fa-paper-plane"></i> Publish Immediate Broadcast
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- TOAST NOTIFICATIONS POPUP FRAME -->
